@@ -102,6 +102,19 @@ img{display:block;max-width:100%}
 .lane.blocked{animation:laneBlock .85s ease-out}
 .lane.blocked u{background:rgba(77,141,255,.9);border-color:#c8e0ff;color:#fff}
 .lane.ping{animation:lanePing .8s ease-out}
+.lane.telegraph{animation:laneTelegraph 1s ease-in-out infinite}
+.lane.telegraph u{background:rgba(255,71,87,.9);border-color:#ffd9dd;color:#fff;
+  box-shadow:0 0 14px rgba(255,71,87,.9)}
+@keyframes laneTelegraph{
+  0%,100%{background:rgba(255,71,87,.06);box-shadow:inset 0 0 0 rgba(255,71,87,0)}
+  50%{background:rgba(255,71,87,.34);box-shadow:inset 0 0 40px rgba(255,71,87,.75)}
+}
+/* 大魔王攻击方向指示箭头 */
+.fx-aim{width:0;height:0;border-top:11px solid transparent;border-bottom:11px solid transparent;
+  border-left:22px solid #ff4757;transform-origin:0 50%;
+  filter:drop-shadow(0 0 10px rgba(255,71,87,.95)) drop-shadow(0 0 22px rgba(255,71,87,.6));
+  animation:aimPulse .9s ease-in-out infinite}
+@keyframes aimPulse{0%,100%{opacity:.55;transform:translate(-50%,-50%) scale(.85)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.15)}}
 @keyframes laneHit{
   0%{background:rgba(255,71,87,0);box-shadow:inset 0 0 0 rgba(255,71,87,0)}
   14%{background:rgba(255,71,87,.6);box-shadow:inset 0 0 46px rgba(255,71,87,.95)}
@@ -671,6 +684,29 @@ img{display:block;max-width:100%}
     r.style.top = pt.y + "px";
     autoRemove(r, 920);
   }
+  /* 大魔王攻击方向指示：目标段闪烁 + 箭头指向 */
+  var aimEl = null;
+  function showAim(zone) {
+    clearAim();
+    var lane = laneEl("hero", zone);
+    if (lane) lane.classList.add("telegraph");
+    var from = centerOf(bossFrame);
+    var to = centerOf(laneEl("hero", zone));
+    var dx = to.x - from.x, dy = to.y - from.y;
+    var ang = Math.atan2(dy, dx) * 180 / Math.PI;
+    aimEl = makeEl("fx fx-aim");
+    aimEl.style.left = (from.x + dx * 0.55) + "px";
+    aimEl.style.top = (from.y + dy * 0.55) + "px";
+    aimEl.style.transform = "translate(-50%,-50%) rotate(" + ang + "deg)";
+  }
+  function clearAim() {
+    if (aimEl && aimEl.parentNode) aimEl.parentNode.removeChild(aimEl);
+    aimEl = null;
+    ZONES.forEach(function (z) {
+      var l = laneEl("hero", z);
+      if (l) l.classList.remove("telegraph");
+    });
+  }
   /* 段位闪光 */
   function markLane(el, cls) {
     if (!el) return;
@@ -888,6 +924,7 @@ img{display:block;max-width:100%}
     state.plan = pick();                // 大魔王准备攻击
     state.phase = "defend";
     bossFrame.classList.add("charging");
+    showAim(state.plan);                // 亮出攻击方向
     await wait(250);
     showChoices("def");                 // 轮到你防守
     state.busy = false;
@@ -899,6 +936,7 @@ img{display:block;max-width:100%}
   async function playerDefend(zone) {
     state.busy = true;
     hideChoices();
+    clearAim();
     bossFrame.classList.remove("charging");
     var bossZone = state.plan;
 
@@ -958,6 +996,7 @@ img{display:block;max-width:100%}
     state.phase = "over";
     state.busy = true;
     hideChoices();
+    clearAim();
     bossFrame.classList.remove("charging");
     rise.classList.remove("dash", "guard", "hurt");
     if (win) {
@@ -1004,6 +1043,7 @@ img{display:block;max-width:100%}
     state.busy = false;
     state.phase = "attack";
     state.started = true;
+    clearAim();
     bossFrame.classList.remove("charging", "hurt", "dive");
     rise.className = "rise idle";
     rise.style.setProperty("--lane", "0px");
