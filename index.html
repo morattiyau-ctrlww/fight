@@ -58,8 +58,27 @@ img{display:block;max-width:100%}
   background:radial-gradient(70% 70% at 50% 45%,rgba(255,40,70,.6),rgba(255,40,70,.1))}
 .boss .frame.hurt{animation:frameHurt .62s cubic-bezier(.36,.07,.19,.97) both}
 .boss .frame.hurt .tint{animation:tintFlash .62s ease-out both}
-.boss .frame.charging{border-color:rgba(255,71,87,.7);
-  box-shadow:0 0 0 2px rgba(255,71,87,.22),0 0 46px rgba(255,71,87,.5)}
+.boss .frame.charging{border-color:rgba(255,71,87,.95);
+  animation:bossCharge 1s ease-in-out infinite}
+@keyframes bossCharge{
+  0%,100%{box-shadow:0 0 0 2px rgba(255,71,87,.3),0 0 30px rgba(255,71,87,.5)}
+  50%{box-shadow:0 0 0 5px rgba(255,71,87,.55),0 0 70px rgba(255,71,87,.95)}
+}
+/* 大魔王蓄力时头顶的红色警告 */
+.boss-warn{position:absolute;left:50%;top:-14px;transform:translate(-50%,-100%);
+  padding:6px 16px;border-radius:99px;white-space:nowrap;
+  font-size:clamp(14px,3vw,18px);font-weight:900;letter-spacing:.12em;color:#fff;
+  background:linear-gradient(180deg,#ff4757,#c81e2d);
+  border:2px solid #ffd9dd;
+  box-shadow:0 0 24px rgba(255,71,87,.95),0 8px 20px rgba(0,0,0,.6);
+  animation:warnBlink .7s ease-in-out infinite;z-index:20;pointer-events:none}
+@keyframes warnBlink{0%,100%{opacity:.65;transform:translate(-50%,-100%) scale(.96)}
+  50%{opacity:1;transform:translate(-50%,-100%) scale(1.06)}}
+/* 全屏红色边缘警告 */
+.screen-warn{position:fixed;inset:0;z-index:55;pointer-events:none;opacity:0;
+  box-shadow:inset 0 0 120px 30px rgba(255,45,70,.75);
+  animation:warnPulse 1s ease-in-out infinite}
+@keyframes warnPulse{0%,100%{opacity:.25}50%{opacity:.85}}
 .boss .frame.dive{animation:bossDive .74s cubic-bezier(.35,.05,.35,1) both}
 @keyframes bossDive{
   0%{transform:translate(0,0) scale(1)}
@@ -110,11 +129,11 @@ img{display:block;max-width:100%}
   50%{background:rgba(255,71,87,.34);box-shadow:inset 0 0 40px rgba(255,71,87,.75)}
 }
 /* 大魔王攻击方向指示箭头 */
-.fx-aim{width:0;height:0;border-top:11px solid transparent;border-bottom:11px solid transparent;
-  border-left:22px solid #ff4757;transform-origin:0 50%;
-  filter:drop-shadow(0 0 10px rgba(255,71,87,.95)) drop-shadow(0 0 22px rgba(255,71,87,.6));
-  animation:aimPulse .9s ease-in-out infinite}
-@keyframes aimPulse{0%,100%{opacity:.55;transform:translate(-50%,-50%) scale(.85)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.15)}}
+.fx-aim{width:0;height:0;border-top:18px solid transparent;border-bottom:18px solid transparent;
+  border-left:36px solid #ff4757;transform-origin:0 50%;
+  filter:drop-shadow(0 0 14px rgba(255,71,87,1)) drop-shadow(0 0 34px rgba(255,71,87,.85));
+  animation:aimPulse .8s ease-in-out infinite}
+@keyframes aimPulse{0%,100%{opacity:.7;transform:translate(-50%,-50%) scale(.9)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.25)}}
 @keyframes laneHit{
   0%{background:rgba(255,71,87,0);box-shadow:inset 0 0 0 rgba(255,71,87,0)}
   14%{background:rgba(255,71,87,.6);box-shadow:inset 0 0 46px rgba(255,71,87,.95)}
@@ -684,12 +703,21 @@ img{display:block;max-width:100%}
     r.style.top = pt.y + "px";
     autoRemove(r, 920);
   }
-  /* 大魔王攻击方向指示：目标段闪烁 + 箭头指向 */
-  var aimEl = null;
+  /* 大魔王攻击方向指示：目标段闪烁 + 箭头指向 + 警告 */
+  var aimEl = null, warnEl = null, screenWarnEl = null;
   function showAim(zone) {
     clearAim();
     var lane = laneEl("hero", zone);
     if (lane) lane.classList.add("telegraph");
+    // 大魔王头顶警告
+    warnEl = document.createElement("div");
+    warnEl.className = "boss-warn";
+    warnEl.textContent = "⚠ 大魔王攻击！";
+    bossFrame.appendChild(warnEl);
+    // 全屏红色边缘警告
+    screenWarnEl = document.createElement("div");
+    screenWarnEl.className = "screen-warn";
+    document.body.appendChild(screenWarnEl);
     var from = centerOf(bossFrame);
     var to = centerOf(laneEl("hero", zone));
     var dx = to.x - from.x, dy = to.y - from.y;
@@ -702,6 +730,10 @@ img{display:block;max-width:100%}
   function clearAim() {
     if (aimEl && aimEl.parentNode) aimEl.parentNode.removeChild(aimEl);
     aimEl = null;
+    if (warnEl && warnEl.parentNode) warnEl.parentNode.removeChild(warnEl);
+    warnEl = null;
+    if (screenWarnEl && screenWarnEl.parentNode) screenWarnEl.parentNode.removeChild(screenWarnEl);
+    screenWarnEl = null;
     ZONES.forEach(function (z) {
       var l = laneEl("hero", z);
       if (l) l.classList.remove("telegraph");
