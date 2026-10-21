@@ -38,12 +38,12 @@ img{display:block;max-width:100%}
 
 /* ---------- 舞台 ---------- */
 .app{position:relative;z-index:1;height:100dvh;display:grid;place-items:center;padding:clamp(6px,1.8vh,18px) 12px}
-.scene{position:relative;width:min(560px,100%);height:min(620px,90dvh);
-  display:flex;flex-direction:column;align-items:center;justify-content:space-between}
+.scene{position:relative;width:min(900px,100%);height:min(560px,90dvh);
+  display:flex;flex-direction:row;align-items:center;justify-content:space-between;gap:clamp(8px,2vw,24px)}
 .fx-layer{position:absolute;inset:0;z-index:40;pointer-events:none;overflow:visible}
 
 /* ---------- 大魔王（照片） ---------- */
-.boss{position:relative;display:flex;flex-direction:column;align-items:center;gap:9px;z-index:5}
+.boss{position:relative;display:flex;flex-direction:column;align-items:center;gap:9px;z-index:5;flex:0 0 auto}
 .frame{position:relative;border-radius:20px;overflow:hidden;background:#0b1130;
   border:1px solid rgba(170,205,255,.22);
   box-shadow:0 22px 46px rgba(0,0,0,.62),0 0 40px rgba(255,71,87,.10);
@@ -117,8 +117,8 @@ img{display:block;max-width:100%}
   100%{background:rgba(120,190,255,0);box-shadow:inset 0 0 0 rgba(120,190,255,0)}
 }
 /* ---------- 英雄（小全身） ---------- */
-.hero-block{position:relative;display:flex;flex-direction:column;align-items:center;gap:11px;z-index:5}
-.hero-row{display:flex;align-items:center;gap:clamp(8px,2.6vw,18px);z-index:5}
+.hero-block{position:relative;display:flex;flex-direction:column;align-items:center;gap:11px;z-index:5;flex:0 0 auto}
+.hero-row{display:flex;flex-direction:column;align-items:center;gap:clamp(8px,2.6vw,18px);z-index:5}
 .hero-stage{position:relative;width:clamp(116px,26vw,164px);height:var(--stageH,186px);
   border-radius:18px;border:1px solid rgba(160,200,255,.13);
   background:linear-gradient(180deg,rgba(87,230,255,.06),rgba(87,230,255,0) 62%)}
@@ -208,11 +208,11 @@ img{display:block;max-width:100%}
 }
 /* ---------- 选择键（贴在英雄右边，动画时收起） ---------- */
 .hero-side{display:flex;flex-direction:column;align-items:center;gap:9px}
-.choices{display:grid;grid-template-rows:repeat(3,1fr);height:var(--stageH,186px);gap:6px;
-  opacity:0;transform:translateX(12px) scale(.92);pointer-events:none;
+.choices{display:grid;grid-template-columns:repeat(3,1fr);width:var(--stageH,186px);gap:6px;
+  opacity:0;transform:translateY(12px) scale(.92);pointer-events:none;
   transition:opacity .22s ease,transform .28s cubic-bezier(.2,1,.3,1)}
 .choices.show{opacity:1;transform:none;pointer-events:auto}
-.choice{position:relative;width:clamp(54px,14vw,72px);border-radius:13px;
+.choice{position:relative;height:clamp(40px,10vw,52px);border-radius:13px;
   display:flex;align-items:center;justify-content:center;gap:4px;
   border:1px solid rgba(170,205,255,.26);
   background:linear-gradient(180deg,rgba(255,255,255,.09),rgba(255,255,255,.02));
@@ -375,6 +375,12 @@ img{display:block;max-width:100%}
 @media (max-width:420px){
   .lanes .lane u{width:14px;height:14px;font-size:9px}
   .hint{font-size:11.5px;padding:5px 10px}
+}
+@media (max-width:640px){
+  .scene{flex-direction:column;height:min(620px,90dvh);width:min(560px,100%)}
+  .hero-row{flex-direction:row}
+  .choices{grid-template-rows:repeat(3,1fr);grid-template-columns:1fr;width:auto;height:var(--stageH,186px)}
+  .choice{height:auto;width:clamp(54px,14vw,72px)}
 }
 @media (prefers-reduced-motion:reduce){
   *{animation-duration:.001s!important;animation-iteration-count:1!important;transition-duration:.05s!important}
