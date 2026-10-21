@@ -1,0 +1,6 @@
+# Secrets — never commit these (this repo is public).
+.env
+.DS_Store
+
+# aider
+.aider*
