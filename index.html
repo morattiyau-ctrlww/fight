@@ -16,9 +16,9 @@
   --blue:#4d8dff;
   --red:#ff4757;
   --gold:#ffd166;
-  --heroW:clamp(48px,10.5vw,64px);
-  --heroH:clamp(86px,19vw,118px);
-  --stageH:clamp(150px,34vw,186px);
+  --heroW:clamp(58px,13vw,76px);
+  --heroH:clamp(104px,23vw,140px);
+  --stageH:clamp(180px,42vw,220px);
   --font:"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -48,7 +48,7 @@ img{display:block;max-width:100%}
   border:1px solid rgba(170,205,255,.22);
   box-shadow:0 22px 46px rgba(0,0,0,.62),0 0 40px rgba(255,71,87,.10);
   transition:box-shadow .3s ease,border-color .3s ease}
-.boss .frame{width:clamp(158px,38vw,246px);aspect-ratio:5/4}
+.boss .frame{width:clamp(190px,46vw,290px);aspect-ratio:5/4}
 .boss .frame img{width:100%;height:100%;object-fit:cover}
 .boss .frame .fallback{position:absolute;inset:0;display:grid;place-items:center;
   font-size:clamp(54px,12vw,94px);filter:drop-shadow(0 10px 20px rgba(0,0,0,.55));
@@ -130,7 +130,7 @@ img{display:block;max-width:100%}
 /* ---------- 英雄（小全身） ---------- */
 .hero-block{position:relative;display:flex;flex-direction:column;align-items:center;gap:11px;z-index:5;flex:0 0 auto}
 .hero-row{display:flex;flex-direction:column;align-items:center;gap:clamp(8px,2.6vw,18px);z-index:5}
-.hero-stage{position:relative;width:clamp(116px,26vw,164px);height:var(--stageH,186px)}
+.hero-stage{position:relative;width:clamp(140px,32vw,196px);height:var(--stageH,220px)}
 .rise{position:absolute;left:50%;bottom:50%;width:var(--heroW,44px);height:var(--heroH,84px);
   margin-left:calc(var(--heroW,44px) / -2);margin-bottom:calc(var(--heroH,84px) / -2);z-index:4;
   transform:translateY(var(--lane,0px));
@@ -397,10 +397,12 @@ img{display:block;max-width:100%}
   .hint{font-size:16px;padding:9px 18px}
 }
 @media (max-width:640px){
-  .scene{flex-direction:column;height:min(620px,90dvh);width:min(560px,100%)}
+  .scene{flex-direction:column;height:min(680px,94dvh);width:min(560px,100%);gap:clamp(6px,1.6vh,14px)}
   .hero-row{flex-direction:row}
-  .choices{grid-template-rows:repeat(3,1fr);grid-template-columns:1fr;width:auto;height:var(--stageH,186px)}
-  .choice{height:auto;width:clamp(54px,14vw,72px)}
+  .choices{grid-template-rows:repeat(3,1fr);grid-template-columns:1fr;width:auto;height:var(--stageH,220px)}
+  .choice{height:auto;width:clamp(60px,16vw,80px)}
+  .boss .frame{width:clamp(210px,58vw,300px)}
+  .hero-stage{width:clamp(150px,40vw,200px)}
 }
 @media (prefers-reduced-motion:reduce){
   *{animation-duration:.001s!important;animation-iteration-count:1!important;transition-duration:.05s!important}
