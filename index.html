@@ -16,8 +16,8 @@
   --blue:#4d8dff;
   --red:#ff4757;
   --gold:#ffd166;
-  --heroW:clamp(34px,7.6vw,46px);
-  --heroH:clamp(62px,14vw,86px);
+  --heroW:clamp(48px,10.5vw,64px);
+  --heroH:clamp(86px,19vw,118px);
   --stageH:clamp(150px,34vw,186px);
   --font:"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
 }
@@ -119,9 +119,7 @@ img{display:block;max-width:100%}
 /* ---------- 英雄（小全身） ---------- */
 .hero-block{position:relative;display:flex;flex-direction:column;align-items:center;gap:11px;z-index:5;flex:0 0 auto}
 .hero-row{display:flex;flex-direction:column;align-items:center;gap:clamp(8px,2.6vw,18px);z-index:5}
-.hero-stage{position:relative;width:clamp(116px,26vw,164px);height:var(--stageH,186px);
-  border-radius:18px;border:1px solid rgba(160,200,255,.13);
-  background:linear-gradient(180deg,rgba(87,230,255,.06),rgba(87,230,255,0) 62%)}
+.hero-stage{position:relative;width:clamp(116px,26vw,164px);height:var(--stageH,186px)}
 .rise{position:absolute;left:50%;bottom:50%;width:var(--heroW,44px);height:var(--heroH,84px);
   margin-left:calc(var(--heroW,44px) / -2);margin-bottom:calc(var(--heroH,84px) / -2);z-index:4;
   transform:translateY(var(--lane,0px));
